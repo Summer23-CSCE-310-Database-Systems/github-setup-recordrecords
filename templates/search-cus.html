@@ -15,22 +15,21 @@
     <div class="search-cus-container">
         <h2>Search Results</h2>
         <table>
-            <tr>
+            <tr id="row-header">
                 <th>Name</th>
                 <th>Artist</th>
                 <th>Genre</th>
-                <th>Year</th>
+                <th>Price</th>
             </tr>
 
-            <!-- Template row, hidden with CSS -->
-            <template id="row-template">
-                <tr>
-                    <td data-column="name"></td>
-                    <td data-column="artist"></td>
-                    <td data-column="genre"></td>
-                    <td data-column="year"></td>
-                </tr>
-            </template>
+            {% for item in data %}
+            <tr class = "row">
+                <td>{{ item[1] }}</td>
+                <td>{{ item[2] }}</td>
+                <td>{{ item[3] }}</td>
+                <td>{{ item[4] }}</td>
+            </tr>
+            {% endfor %}
 
             <!-- Populate table rows dynamically with JavaScript -->
         </table>
