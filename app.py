@@ -8,7 +8,18 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://mzlmdawh:68uKpdQLKb5UwzZce
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
+"""
+    SETUP:
+        To run the app:
+            export FLASK_APP=app.py
+            flask run 
+        
+        DO THE ABOVE FIRST!
 
+        To add, delete, change any columns or add new models:
+            flask db migrate
+            flask db upgrade
+"""
 class ManagerModel(db.Model):
     __tablename__ = 'managers'
 
