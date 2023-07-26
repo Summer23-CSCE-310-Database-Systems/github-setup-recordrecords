@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Screen</title>
+    <link rel = "stylesheet" href="{{url_for('static',filename='css/search-cus.css')}}">
+</head>
+<body>
+    <div class="search-cus-input-container">
+        <input type="text" id="search-input" placeholder="Search...">
+        <button type="button">Search</button>
+    </div>
+
+    <div class="search-cus-container">
+        <h2>Search Results</h2>
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Artist</th>
+                <th>Genre</th>
+                <th>Year</th>
+            </tr>
+
+            <!-- Template row, hidden with CSS -->
+            <template id="row-template">
+                <tr>
+                    <td data-column="name"></td>
+                    <td data-column="artist"></td>
+                    <td data-column="genre"></td>
+                    <td data-column="year"></td>
+                </tr>
+            </template>
+
+            <!-- Populate table rows dynamically with JavaScript -->
+        </table>
+    </div>
+</body>
+</html>
