@@ -60,12 +60,6 @@ body {
     color: #fff;
 }
 
-.search-cus-container table .row {
-    background-color: #c9c9c9;
-    font-weight: bolder;
-    color: #828282;
-}
-
 /* Using CSS Grid to create a template for rows */
 .search-cus-container table {
     font-size: 20px;
