@@ -3,19 +3,6 @@ import psycopg2
 
 app = Flask(__name__)
 
-"""
-    SETUP:
-        To run the app:
-            export FLASK_APP=app.py
-            flask run 
-        
-        DO THE ABOVE FIRST!
-
-        To add, delete, change any columns or add new models:
-            flask db migrate
-            flask db upgrade
-"""
-
 cursor = None
 def connect_db():
     db_link = 'postgres://mzlmdawh:68uKpdQLKb5UwzZces5mCIbhtG2yOH3o@batyr.db.elephantsql.com/mzlmdawh'
@@ -44,11 +31,18 @@ def get_table(table):
         print("ERROR")
         return jsonify({'error': str(e)})
 
-@app.route('/')
-def index():
-    return render_template('index.html')
-    
-
+@app.route('/', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        custID = request.form.get('CustomerID')
+        manID = request.form.get('ManagerID')
+        print('custid', custID, 'manID', manID)
+        if custID != '':
+            return redirect(url_for('search_cus'))
+        elif manID != '':
+            return redirect(url_for('manager_vinyl'))
+        else:
+            return render_template('index.html')
 
 @app.route('/franchise')
 def franchise():
