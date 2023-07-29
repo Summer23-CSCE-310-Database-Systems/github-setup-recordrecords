@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, jsonify
+from flask import Flask, render_template, url_for, jsonify, request, redirect
 import psycopg2
 
 app = Flask(__name__)
@@ -44,9 +44,21 @@ def get_table(table):
         print("ERROR")
         return jsonify({'error': str(e)})
 
-@app.route('/')
-def index():
+@app.route('/', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        custID = request.form.get('CustomerID')
+        manID = request.form.get('ManagerID')
+        print('custid', custID, 'manID', manID)
+        if custID  != '':
+            return redirect(url_for('search_cus'))
+        elif manID  != '':
+            return redirect(url_for('franchise'))
+        else:
+            return render_template('index.html')
     return render_template('index.html')
+    
+
 
 @app.route('/franchise')
 def franchise():
