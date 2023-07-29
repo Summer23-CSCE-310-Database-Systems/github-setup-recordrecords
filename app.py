@@ -58,6 +58,11 @@ def search_cus():
     print('data',data)
     return render_template('search-cus.html', data=data)
 
+@app.route('/manager-vinyl')
+def manager_vinyl():
+    data = get_table('vinyls')
+    print('data',data)
+    return render_template('manager.html', data=data)
 
 if __name__ == "__main__": 
     app.run(debug=True) 
