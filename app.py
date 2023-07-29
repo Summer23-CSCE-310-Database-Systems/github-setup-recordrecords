@@ -43,6 +43,7 @@ def login():
             return redirect(url_for('manager_vinyl'))
         else:
             return render_template('index.html')
+    return render_template('index.html')
 
 @app.route('/franchise')
 def franchise():
@@ -59,6 +60,23 @@ def manager_vinyl():
     data = get_table('vinyls')
     print('data',data)
     return render_template('manager.html', data=data)
+
+@app.route('/manager-vinyl/delete', methods = ['GET', 'POST'])
+def delete_vinyl():
+    if request.method == 'POST':
+        conn = connect_db()
+        curr = conn.cursor()
+
+        vin_id = request.form['del']
+        query = f'DELETE FROM vinyls WHERE vin_id = {vin_id}'
+        print('executing', query)
+        curr.execute(query)
+        conn.commit()
+
+        curr.close()
+        conn.close()
+    return redirect(url_for('manager_vinyl'))
+
 
 if __name__ == "__main__": 
     app.run(debug=True) 
