@@ -10,6 +10,21 @@ def connect_db():
     conn = psycopg2.connect(db_link)
     return conn
 
+def delete_from_db(table, _id, id_type):
+    # Open connection
+    conn = connect_db()
+    curr = conn.cursor()
+
+    # Table is the table you'll want to query, id_type is the specific attr, _id is the attr itself
+    query = f'DELETE FROM {table} WHERE {id_type} = {_id}'
+    print('executing', query)
+    curr.execute(query)
+    conn.commit()
+
+    # Close connection
+    curr.close()
+    conn.close()
+
 @app.route('/get_data', methods=['GET'])
 def get_table(table):
     try:
@@ -55,60 +70,67 @@ def search_cus():
     print('data',data)
     return render_template('search-cus.html', data=data)
 
+# Vinyl operations
 @app.route('/admin-vinyl')
 def manager_vinyl():
     data = get_table('vinyls')
     print('data',data)
     return render_template('admin-vinyl.html', data=data)
 
+@app.route('/admin-vinyl/delete', methods=['GET', 'POST'])
+def delete_vinyl():
+    if request.method == 'POST':
+        vin_id = request.form['del']
+        delete_from_db('vinyls', vin_id, 'vin_id')
+    return redirect(url_for('manager_vinyl'))
+
+@app.route('/admin-vinyl/update', methods=['GET', 'POST'])
+def update_vinyl():
+    if request.method == 'POST':
+        pass
+
+# Customer operations
 @app.route('/admin-cust')
 def manager_cust():
     data = get_table('customers')
     print('data', data)
     return render_template('admin-cust.html', data=data)
 
+@app.route('/admin-cust/delete', methods=['GET', 'POST'])
+def delete_cust():
+    if request.method == 'POST':
+        cust_id = request.form['del']
+        delete_from_db('customers', cust_id, 'cust_id')
+    return redirect(url_for('manager_cust'))
+
+# Manager operations
 @app.route('/admin-mana')
 def manager_mana():
     data = get_table('managers')
     print('data', data)
     return render_template('admin-manager.html', data=data)
 
-@app.route('/admin-vinyl/delete', methods = ['GET', 'POST'])
-def delete_vinyl():
+@app.route('/admin-mana/create', methods=['GET', 'POST'])
+def create_mana():
     if request.method == 'POST':
-        conn = connect_db()
-        curr = conn.cursor()
+        print(request.form)
+        if all([request.form[item] != '' for item in request.form]):
+            print("HELP")
+            # All items are accounted for
+            query = f"""
+            INSERT INTO managers (mana_fname, mana_lname, mana_phone)
+            VALUES ('{request.form['fname']}', '{request.form['lname']}', '{request.form['phone']}')
+            """
+            conn = connect_db()
+            curr = conn.cursor()
 
-        vin_id = request.form['del']
-        query = f'DELETE FROM vinyls WHERE vin_id = {vin_id}'
-        print('executing', query)
-        curr.execute(query)
-        conn.commit()
+            print('executing', query)
 
-        curr.close()
-        conn.close()
-    return redirect(url_for('manager_vinyl'))
-
-@app.route('/admin-vinyl/update', methods = ['GET', 'POST'])
-def update_vinyl():
-    if request.method == 'POST':
-        pass
-
-@app.route('/admin-cust/delete', methods=['GET', 'POST'])
-def delete_cust():
-    if request.method == 'POST':
-        conn = connect_db()
-        curr = conn.cursor()
-
-        cust_id = request.form['del']
-        query = f'DELETE FROM customers WHERE cust_id = {cust_id}'
-        print('executing', query)
-        curr.execute(query)
-        conn.commit()
-
-        curr.close()
-        conn.close()
-    return redirect(url_for('manager_cust'))
+            curr.execute(query)
+            conn.commit()
+            curr.close()
+            conn.close()
+    return redirect(url_for('manager_mana'))
 
 if __name__ == "__main__": 
     app.run(debug=True) 
