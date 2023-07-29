@@ -61,6 +61,12 @@ def manager_vinyl():
     print('data',data)
     return render_template('manager.html', data=data)
 
+@app.route('/manager-cust')
+def manager_cust():
+    data = get_table('customers')
+    print('data', data)
+    return render_template('manager-cust.html', data=data)
+
 @app.route('/manager-vinyl/delete', methods = ['GET', 'POST'])
 def delete_vinyl():
     if request.method == 'POST':
@@ -77,6 +83,21 @@ def delete_vinyl():
         conn.close()
     return redirect(url_for('manager_vinyl'))
 
+@app.route('/manager-cust/delete', methods=['GET', 'POST'])
+def delete_cust():
+    if request.method == 'POST':
+        conn = connect_db()
+        curr = conn.cursor()
+
+        cust_id = request.form['del']
+        query = f'DELETE FROM customers WHERE cust_id = {cust_id}'
+        print('executing', query)
+        curr.execute(query)
+        conn.commit()
+
+        curr.close()
+        conn.close()
+    return redirect(url_for('manager_cust'))
 
 if __name__ == "__main__": 
     app.run(debug=True) 

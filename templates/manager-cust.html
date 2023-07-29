@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manager View</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<!-- fontawesome 5 -->
+<link rel="stylesheet" type="text/css"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" />
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/js/all.min.js"></script>
+
+<body class="" style="background-color: #6F5643">
+    <div>
+        <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search..">
+    </div>
+    <div class="container rounded flex-column p-3 w-25 h-100" style="background-color: #ECE6C2">
+        <h2>Customers</h2>
+
+        <form action="/manager-cust/delete" method="post" id="del-form"></form>
+            <table id="myTable" class="table table-striped">
+                <thead>
+                    <tr id="row-header text-center align-middle">
+                        <th>L. Name</th>
+                        <th>F. Name</th>
+                        <th>Phone Number</th>
+                        <th> </th>
+                    </tr>
+                </thead>
+                {% for item in data %}
+                <tr class="text-center align-middle">
+                    <td>{{ item[1] }}</td>
+                    <td>{{ item[2] }}</td>
+                    <td>{{ item[3] }}</td>
+                    <td><button type="submit" class="btn btn-default btn-md" name="del" form="del-form"
+                            value="{{item[0]}}"><i class="far fa-trash-alt" style="color: red;"></i></button></td>
+                </tr>
+                {% endfor %}
+
+                <!-- Populate table rows dynamically with JavaScript -->
+            </table>
+
+    </div>
+
+    <!-- Bootstrap Javascripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>
