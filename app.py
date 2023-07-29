@@ -55,19 +55,25 @@ def search_cus():
     print('data',data)
     return render_template('search-cus.html', data=data)
 
-@app.route('/manager-vinyl')
+@app.route('/admin-vinyl')
 def manager_vinyl():
     data = get_table('vinyls')
     print('data',data)
-    return render_template('manager.html', data=data)
+    return render_template('admin-vinyl.html', data=data)
 
-@app.route('/manager-cust')
+@app.route('/admin-cust')
 def manager_cust():
     data = get_table('customers')
     print('data', data)
-    return render_template('manager-cust.html', data=data)
+    return render_template('admin-cust.html', data=data)
 
-@app.route('/manager-vinyl/delete', methods = ['GET', 'POST'])
+@app.route('/admin-mana')
+def manager_mana():
+    data = get_table('managers')
+    print('data', data)
+    return render_template('admin-manager.html', data=data)
+
+@app.route('/admin-vinyl/delete', methods = ['GET', 'POST'])
 def delete_vinyl():
     if request.method == 'POST':
         conn = connect_db()
@@ -83,7 +89,12 @@ def delete_vinyl():
         conn.close()
     return redirect(url_for('manager_vinyl'))
 
-@app.route('/manager-cust/delete', methods=['GET', 'POST'])
+@app.route('/admin-vinyl/update', methods = ['GET', 'POST'])
+def update_vinyl():
+    if request.method == 'POST':
+        pass
+
+@app.route('/admin-cust/delete', methods=['GET', 'POST'])
 def delete_cust():
     if request.method == 'POST':
         conn = connect_db()
