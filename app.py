@@ -144,9 +144,9 @@ def update_vinyl():
 # Customer operations
 @app.route('/admin-cust')
 def manager_cust():
-    data = get_table('customers')
-    print('data', data)
-    return render_template('admin-cust.html', data=data)
+    _data = get_table('customers')
+    print('data', _data)
+    return render_template('admin-cust.html', data=_data)
 
 @app.route('/admin-cust/delete', methods=['GET', 'POST'])
 def delete_cust():
