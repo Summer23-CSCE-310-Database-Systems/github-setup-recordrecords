@@ -1,8 +1,8 @@
-from flask import Flask, render_template, url_for, jsonify, request, redirect
+from flask import Flask, render_template, url_for, jsonify, request, redirect, session
 import psycopg2
 
 app = Flask(__name__)
-
+app.secret_key = '123'
 cursor = None
 def connect_db():
     db_link = 'postgres://mzlmdawh:68uKpdQLKb5UwzZces5mCIbhtG2yOH3o@batyr.db.elephantsql.com/mzlmdawh'
@@ -51,6 +51,7 @@ def login():
     if request.method == 'POST':
         custID = request.form.get('CustomerID')
         manID = request.form.get('ManagerID')
+        session['customer_id_entered'] = custID
         print('custid', custID, 'manID', manID)
         if custID != '':
             return redirect(url_for('search_cus'))
@@ -66,9 +67,60 @@ def franchise():
 
 @app.route('/search-cus')
 def search_cus():
-    data = get_table('vinyls')
-    print('data',data)
-    return render_template('search-cus.html', data=data)
+    customer_id_entered = session.get('customer_id_entered')
+    data = get_table('purchases')
+    print('data1', data)
+    newdata = [row for row in data if row[2] == int(customer_id_entered)]
+    print('data',newdata, 'id', customer_id_entered)
+    return render_template('search-cus.html', data=newdata)
+@app.route('/search-cus/delete', methods=['GET', 'POST'])
+def delete_cus():
+    if request.method == 'POST':
+        id = request.form['del']
+        delete_from_db('purchases', id, 'pur_id')
+    return redirect(url_for('search_cus'))
+@app.route('/search-cus/update', methods = ['GET', 'POST'])
+def update_cus():
+    if request.method == 'POST':
+        print(request.form, 'adasdasdads')
+        pur_id = request.form['1']
+        data = get_table('purchases')
+        purchase_id_exists = any(row[0] == int(pur_id) for row in data)
+        if (purchase_id_exists):
+            query = f"""
+            UPDATE purchases
+            SET pur_id = '{request.form['1']}', vin_id = '{request.form['2']}', cust_id = '{request.form['3']}', pur_cost = '{request.form['4']}'
+            WHERE pur_id = {pur_id};
+            """
+            conn = connect_db()
+            curr = conn.cursor()
+
+            print('executing', query)
+
+            curr.execute(query)
+            conn.commit()
+            curr.close()
+            conn.close()
+
+
+
+        elif all([request.form[item] != '' for item in request.form]):
+            print("UPDATING CUSTOMER PURCHASE")
+            # All items are accounted for
+            query = f"""
+            INSERT INTO purchases (pur_id, vin_id, cust_id, pur_cost) VALUES
+             ('{request.form['1']}', '{request.form['2']}', '{request.form['3']}', '{request.form['4']}')
+            """
+            conn = connect_db()
+            curr = conn.cursor()
+
+            print('executing', query)
+
+            curr.execute(query)
+            conn.commit()
+            curr.close()
+            conn.close()
+    return redirect(url_for('search_cus'))
 
 # Vinyl operations
 @app.route('/admin-vinyl')

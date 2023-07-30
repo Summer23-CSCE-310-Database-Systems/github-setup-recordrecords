@@ -9,28 +9,9 @@ body {
     background-color: #6F5643;
 }
 
-.search-cus-input-container {
-    margin-top: 20px;
-    display: flex;
-}
-
-.search-cus-input-container input[type="text"] {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px 0 0 5px; /* Rounded left corners */
-}
-
-.search-cus-input-container button {
-    padding: 10px 20px;
-    background-color: #CC6B49;
-    color: #fff;
-    border: none;
-    border-radius: 0 5px 5px 0; /* Rounded right corners */
-    cursor: pointer;
-}
-
 .search-cus-container {
-    max-width: 400px;
+    margin-top: 50px;
+    max-width: 600px;
     border: 1px solid #ccc;
     padding: 20px;
     border-radius: 10px;
@@ -58,22 +39,34 @@ body {
 .search-cus-container table th {
     background-color: #CC6B49;
     color: #fff;
+    width: 50px;
 }
 
 .search-cus-container table .row {
-    background-color: #c9c9c9;
+    background-color: #ffffff;
     font-weight: bolder;
     color: #828282;
 }
 
 /* Using CSS Grid to create a template for rows */
 .search-cus-container table {
-    font-size: 20px;
+    font-size: 15px;
     display: flex;
     grid-template-columns: repeat(3, 2fr); /* Three equal-width columns */
     gap: 0; /* No gap between cells */
 }
-
+.deletebutton {
+    background-color: rgb(219, 116, 116);
+}
+.updatebutton {
+    background-color: rgb(116, 219, 130);
+}
+.modify-input {
+    min-width: 0px;
+    padding: 0;
+    margin: 0;
+    width: 75px;
+}
 .search-cus-container table tr:nth-child(even) {
     background-color: #f2f2f2; /* Alternate row background color */
 }
@@ -81,6 +74,7 @@ body {
 /* Add styles for table headers */
 .search-cus-container table th {
     font-weight: bold;
+    
 }
 
 /* Add styles for the data cells */
