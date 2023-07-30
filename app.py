@@ -65,7 +65,7 @@ def login():
 def franchise():
     return render_template('franchise.html')
 
-@app.route('/search-cus')
+@app.route('/search-cus') #actually searches through purchases table
 def search_cus():
     customer_id_entered = session.get('customer_id_entered')
     data = get_table('purchases')
@@ -74,13 +74,14 @@ def search_cus():
     print('data',newdata, 'id', customer_id_entered)
     return render_template('search-cus.html', data=newdata)
 @app.route('/search-cus/delete', methods=['GET', 'POST'])
-def delete_cus():
+def delete_cus(): #actually searches through purchases table
     if request.method == 'POST':
         id = request.form['del']
         delete_from_db('purchases', id, 'pur_id')
     return redirect(url_for('search_cus'))
+
 @app.route('/search-cus/update', methods = ['GET', 'POST'])
-def update_cus():
+def update_cus(): #actually deals with pudating purchases
     if request.method == 'POST':
         print(request.form, 'adasdasdads')
         pur_id = request.form['1']
@@ -143,17 +144,38 @@ def update_vinyl():
 
 # Customer operations
 @app.route('/admin-cust')
-def manager_cust():
+def manager_cust(): #gets and displays the customer table
     _data = get_table('customers')
     print('data', _data)
     return render_template('admin-cust.html', data=_data)
 
 @app.route('/admin-cust/delete', methods=['GET', 'POST'])
-def delete_cust():
+def delete_cust(): #deletes from customer table
     if request.method == 'POST':
         cust_id = request.form['del']
         delete_from_db('customers', cust_id, 'cust_id')
     return redirect(url_for('manager_cust'))
+
+@app.route('/admin-cust/add-cust', methods=['POST'])
+def add_cust(): #adds to customer table
+    # make connecting
+    # make cursor
+    conn = connect_db()
+    curr = conn.cursor()
+    # make sql string using text inside text fields 
+    fname = request.form['fname']
+    lname = request.form['lname']
+    phone = request.form['phone']
+    query = f"INSERT INTO customers (cust_fname, cust_lname, cust_phone) VALUES ('{fname}', '{lname}', '{phone}');"
+    # submit sql command
+    curr.execute(query)
+    conn.commit()
+    # close connection and cursor
+    curr.close()
+    conn.close()
+    return redirect(url_for('manager_cust'))
+
+
 
 # Manager operations
 @app.route('/admin-mana', methods=['GET', 'POST'])

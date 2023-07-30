@@ -24,6 +24,7 @@
 
         <form action="/admin-cust/update" method="post" id="upd-form"></form>
         <form action="/admin-cust/delete" method="post" id="del-form"></form>
+        <form action="/admin-cust/add-cust" method="post" id="add-cust-form"></form>
         <table id="myTable" class="table table-striped">
             <thead>
                 <tr id="row-header text-center align-middle">
@@ -45,6 +46,14 @@
                             class="fas fa-tools" style="color: #1e3050;"></i></button></td>
             </tr>
             {% endfor %}
+            <tr>
+                <td><input type="text" name="fname" placeholder="F. Name" form="add-cust-form"></td>
+                <td><input type="text" name="lname" placeholder="L. Name" form="add-cust-form"></td>
+                <td><input type="text" name="phone" placeholder="Phone" form="add-cust-form"></td>
+                <td colspan="2">
+                    <button type="submit" class="btn btn-secondary" form="add-cust-form">Add</button>
+                </td>
+            </tr>
         
             <!-- Populate table rows dynamically with JavaScript -->
         </table>
