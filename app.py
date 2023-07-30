@@ -81,7 +81,7 @@ def delete_cus(): #actually searches through purchases table
     return redirect(url_for('search_cus'))
 
 @app.route('/search-cus/update', methods = ['GET', 'POST'])
-def update_cus(): #actually deals with pudating purchases
+def update_cus(): #actually deals with udating purchases
     if request.method == 'POST':
         print(request.form, 'adasdasdads')
         pur_id = request.form['1']
@@ -152,8 +152,8 @@ def manager_cust(): #gets and displays the customer table
 @app.route('/admin-cust/delete', methods=['GET', 'POST'])
 def delete_cust(): #deletes from customer table
     if request.method == 'POST':
-        cust_id = request.form['del']
-        delete_from_db('customers', cust_id, 'cust_id')
+        customer_id = request.form['del']
+        delete_from_db('customers', customer_id, 'cust_id')
     return redirect(url_for('manager_cust'))
 
 @app.route('/admin-cust/add-cust', methods=['POST'])
