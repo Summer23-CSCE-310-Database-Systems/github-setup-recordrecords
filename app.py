@@ -104,8 +104,30 @@ def delete_cust():
     return redirect(url_for('manager_cust'))
 
 # Manager operations
-@app.route('/admin-mana')
+@app.route('/admin-mana', methods=['GET', 'POST'])
 def manager_mana():
+    if request.method == 'POST':
+        if any([request.form[item] == '' for item in request.form]):
+            return redirect(url_for('manager_mana'))
+        else:
+            conn = connect_db()
+            curr = conn.cursor()
+
+            print(request.form)
+
+            query = f"""
+            UPDATE managers
+            SET mana_fname = '{request.form['fname']}', mana_lname = '{request.form['lname']}', mana_phone = '{request.form['phone']}'
+            WHERE mana_id = {request.form['id']};
+            """
+
+            print('executing', query)
+            curr.execute(query)
+            conn.commit()
+
+            curr.close()
+            conn.close()
+
     data = get_table('managers')
     print('data', data)
     return render_template('admin-manager.html', data=data)
@@ -131,6 +153,29 @@ def create_mana():
             curr.close()
             conn.close()
     return redirect(url_for('manager_mana'))
+
+@app.route('/admin-mana/update', methods=['GET', 'POST'])
+def update_mana():
+    if request.method == 'POST':
+        conn = connect_db()
+        curr = conn.cursor()
+
+        print(request.form)
+
+        query = f"SELECT * FROM managers WHERE mana_id = {request.form['upd']}"
+        curr.execute(query)
+        data = curr.fetchall()
+        print(data[0])
+        curr.close()
+        conn.close()
+    return render_template('update-manager.html', data=data[0])
+
+@app.route('/admin-mana/delete', methods=['GET', 'POST'])
+def delete_mana():
+    if request.method == 'POST':
+        mana_id = request.form['del']
+        delete_from_db('managers', mana_id, 'mana_id')
+    return redirect(url_for('manager_mana')) 
 
 if __name__ == "__main__": 
     app.run(debug=True) 
