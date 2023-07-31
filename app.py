@@ -191,6 +191,7 @@ def add_cust(): #adds to customer table
 
     if fname == '' or lname == '' or phone == '':
         return redirect(url_for('manager_cust'))
+    
     query = f"INSERT INTO customers (cust_fname, cust_lname, cust_phone) VALUES ('{fname}', '{lname}', '{phone}');"
     # submit sql command
     curr.execute(query)
