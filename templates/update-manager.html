@@ -19,7 +19,7 @@
     <div>
         <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search..">
     </div>
-    <div class="container rounded flex-column p-3 w-25 h-100" style="background-color: #ECE6C2">
+    <div class="container rounded flex-column p-3 h-100" style="background-color: #ECE6C2">
         <h2>Update Manager</h2>
 
         <form action="/admin-mana" method="post" id="upd-form"></form>
@@ -32,7 +32,7 @@
                     <th>Submit?</th>
                 </tr>
             </thead>
-            <tr class="text-center align-middle">
+            <tr class="text-center align-middle"> <!--do we need this row?-->
                 <td>{{ data[1] }}</td>
                 <td>{{ data[2] }}</td>
                 <td>{{ data[3] }}</td>

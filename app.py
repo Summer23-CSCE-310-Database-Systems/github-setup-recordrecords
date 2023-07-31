@@ -143,8 +143,30 @@ def update_vinyl():
         pass
 
 # Customer operations
-@app.route('/admin-cust')
+@app.route('/admin-cust', methods=['GET', 'POST'])
 def manager_cust(): #gets and displays the customer table
+    if request.method == 'POST':
+        if any([request.form[item] == '' for item in request.form]):
+            return redirect(url_for('manager_cust'))
+        else:
+            conn = connect_db()
+            curr = conn.cursor()
+
+            print(request.form)
+
+            query = f"""
+            UPDATE customers
+            SET cust_fname = '{request.form['fname']}', cust_lname = '{request.form['lname']}', cust_phone = '{request.form['phone']}'
+            WHERE cust_id = {request.form['upd-cust']};
+            """
+
+            print('executing', query)
+            curr.execute(query)
+            conn.commit()
+
+            curr.close()
+            conn.close()
+
     _data = get_table('customers')
     print('data', _data)
     return render_template('admin-cust.html', data=_data)
@@ -166,6 +188,9 @@ def add_cust(): #adds to customer table
     fname = request.form['fname']
     lname = request.form['lname']
     phone = request.form['phone']
+
+    if fname == '' or lname == '' or phone == '':
+        return redirect(url_for('manager_cust'))
     query = f"INSERT INTO customers (cust_fname, cust_lname, cust_phone) VALUES ('{fname}', '{lname}', '{phone}');"
     # submit sql command
     curr.execute(query)
@@ -174,6 +199,24 @@ def add_cust(): #adds to customer table
     curr.close()
     conn.close()
     return redirect(url_for('manager_cust'))
+
+
+@app.route('/admin-cust/update', methods=['POST'])
+def update_cust():
+    #if request.method == 'POST':
+    conn = connect_db()
+    curr = conn.cursor()
+
+    print(request.form)
+
+    query = f"SELECT * FROM customers WHERE cust_id = {request.form['upd-cust']}"
+    curr.execute(query)
+    data = curr.fetchall()
+    print(data[0])
+    curr.close()
+    conn.close()
+
+    return render_template('update-cust.html', data=data[0])
 
 
 
