@@ -171,6 +171,32 @@ def manager_cust(): #gets and displays the customer table
     print('data', _data)
     return render_template('admin-cust.html', data=_data)
 
+@app.route('/admin-cust/filter', methods=['GET'])
+def filter_cust():
+    conn = connect_db()
+    curr = conn.cursor()
+
+    print(request.form)
+
+    filter_by_id = request.args.get('filter-by-id')
+
+    if filter_by_id == '':
+        return redirect(url_for('manager_cust'))
+
+    query = f"""
+    SELECT * FROM customers
+    WHERE cust_id = {filter_by_id};
+    """
+
+    print('executing', query)
+    curr.execute(query)
+    data = curr.fetchall()
+    conn.commit()
+
+    curr.close()
+    conn.close()
+    return render_template('admin-cust.html', data=data)
+
 @app.route('/admin-cust/delete', methods=['GET', 'POST'])
 def delete_cust(): #deletes from customer table
     if request.method == 'POST':

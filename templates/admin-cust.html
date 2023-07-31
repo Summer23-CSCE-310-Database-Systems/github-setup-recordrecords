@@ -16,8 +16,12 @@
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/js/all.min.js"></script>
 
 <body class="" style="background-color: #6F5643">
-    <div>
-        <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search..">
+    <div class="d-flex justify-content-center align-items-center ">
+        <form action="/admin-cust/filter" method="get" id="filter-form"></form>
+        <div class="mb-8 mt-1 text-center">
+            <input type="text" id="myInput" name="filter-by-id" class="form-control" placeholder="Customer ID" style="display: inline-block; width: auto;" form="filter-form">
+            <button class="btn btn-secondary" type="submit" form="filter-form">Search</button>
+        </div>
     </div>
     <div class="container rounded flex-column p-3 h-100" style="background-color: #ECE6C2">
         <h2>Customers</h2>
