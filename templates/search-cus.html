@@ -13,7 +13,8 @@
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/js/all.min.js"></script>
 <body>
     
-    
+    <a class="btn btn-primary p-2 mb-3" href="{{ url_for('login') }}" style="background-color: #CC6B49;" role="button">Go to login</a>
+
     <div class="search-cus-container">
         <h2>Customer Purchases</h2>
         <form action="/search-cus/delete" method="post" id="del-form"></form>
