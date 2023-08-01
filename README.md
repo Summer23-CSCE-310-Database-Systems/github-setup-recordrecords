@@ -17,4 +17,4 @@ You can get this application locally by cloning this repository.
 ```python
 flask run
 ```
-- You can test this application by cloning it locally and installing the requirements and external dependencies listed above. Then launch the application using the command: flask run
+You can test this application by cloning it locally and installing the requirements and external dependencies listed above. Then launch the application using the command: flask run
