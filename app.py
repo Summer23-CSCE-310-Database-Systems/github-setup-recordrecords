@@ -56,10 +56,14 @@ def login():
         if custID != '':
             return redirect(url_for('search_cus'))
         elif manID != '':
-            return redirect(url_for('manager_vinyl'))
+            return redirect(url_for('admin_dash'))
         else:
             return render_template('index.html')
     return render_template('index.html')
+
+@app.route('/admin-dash')
+def admin_dash():
+    return render_template('admin-dashboard.html')
 
 @app.route('/franchise')
 def franchise():
