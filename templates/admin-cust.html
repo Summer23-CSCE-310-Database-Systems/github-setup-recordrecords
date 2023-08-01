@@ -16,14 +16,19 @@
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/js/all.min.js"></script>
 
 <body class="" style="background-color: #6F5643">
-    <div>
-        <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search..">
+    <div class="d-flex justify-content-center align-items-center ">
+        <form action="/admin-cust/filter" method="get" id="filter-form"></form>
+        <div class="mb-8 mt-1 text-center">
+            <input type="text" id="myInput" name="filter-by-id" class="form-control" placeholder="Customer ID" style="display: inline-block; width: auto;" form="filter-form">
+            <button class="btn btn-secondary" type="submit" form="filter-form">Search</button>
+        </div>
     </div>
-    <div class="container rounded flex-column p-3 w-25 h-100" style="background-color: #ECE6C2">
+    <div class="container rounded flex-column p-3 h-100" style="background-color: #ECE6C2">
         <h2>Customers</h2>
 
         <form action="/admin-cust/update" method="post" id="upd-form"></form>
         <form action="/admin-cust/delete" method="post" id="del-form"></form>
+        <form action="/admin-cust/add-cust" method="post" id="add-cust-form"></form>
         <table id="myTable" class="table table-striped">
             <thead>
                 <tr id="row-header text-center align-middle">
@@ -41,10 +46,18 @@
                 <td>{{ item[3] }}</td>
                 <td><button type="submit" class="btn btn-default btn-md" name="del" form="del-form" value="{{item[0]}}"><i
                             class="far fa-trash-alt" style="color: red;"></i></button></td>
-                <td><button type="submit" class="btn btn-default btn-md" name="del" form="upd-form" value="{{item[0]}}"><i
+                <td><button type="submit" class="btn btn-default btn-md" name="upd-cust" form="upd-form" value="{{item[0]}}"><i
                             class="fas fa-tools" style="color: #1e3050;"></i></button></td>
             </tr>
             {% endfor %}
+            <tr>
+                <td><input type="text" name="fname" placeholder="F. Name" form="add-cust-form"></td>
+                <td><input type="text" name="lname" placeholder="L. Name" form="add-cust-form"></td>
+                <td><input type="text" name="phone" placeholder="Phone" form="add-cust-form"></td>
+                <td colspan="2">
+                    <button type="submit" class="btn btn-secondary" form="add-cust-form">Add</button>
+                </td>
+            </tr>
         
             <!-- Populate table rows dynamically with JavaScript -->
         </table>

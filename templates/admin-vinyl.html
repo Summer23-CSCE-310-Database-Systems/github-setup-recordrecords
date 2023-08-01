@@ -24,8 +24,9 @@
             <input type="text" id="myInput" class="form-control" onkeyup="myFunction()" placeholder="Search.." aria-label="Search" aria-describedby="basic-addon1">
           </div>
        </div>
-    <div class="container rounded flex-column p-3" style="background-color: #ECE6C2"> 
-        <h2 style="text-align: center; margin-bottom: 20px; color: #CC6B49;">Results</h2>
+  
+    <div class="container rounded flex-column p-3 h-100" style="background-color: #ECE6C2"> 
+        <h2 style="text-align: center; margin-bottom: 20px; color: #CC6B49;">Available Records</h2>
         {%with messages = get_flashed_messages()%}
         {%if messages%}
         {%for message in messages%}
@@ -33,6 +34,7 @@
         {%endfor%}
         {%endif%}
         {%endwith%}
+
         <form action="/admin-vinyl/delete" method="post" id="del-form"></form>
         <table id="myTable" class="table table-striped h-50">
             <thead style="color: white; background-color: #73BDA8;">

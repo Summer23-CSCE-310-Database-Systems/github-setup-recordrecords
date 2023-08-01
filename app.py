@@ -69,7 +69,7 @@ def admin_dash():
 def franchise():
     return render_template('franchise.html')
 
-@app.route('/search-cus')
+@app.route('/search-cus') #actually searches through purchases table
 def search_cus():
     customer_id_entered = session.get('customer_id_entered')
     data = get_table('purchases')
@@ -78,13 +78,14 @@ def search_cus():
     print('data',newdata, 'id', customer_id_entered)
     return render_template('search-cus.html', data=newdata)
 @app.route('/search-cus/delete', methods=['GET', 'POST'])
-def delete_cus():
+def delete_cus(): #actually searches through purchases table
     if request.method == 'POST':
         id = request.form['del']
         delete_from_db('purchases', id, 'pur_id')
     return redirect(url_for('search_cus'))
+
 @app.route('/search-cus/update', methods = ['GET', 'POST'])
-def update_cus():
+def update_cus(): #actually deals with udating purchases
     if request.method == 'POST':
         print(request.form, 'adasdasdads')
         pur_id = request.form['1']
@@ -234,18 +235,109 @@ def add_vinyl():
         return redirect(url_for('manager_vinyl'))
     
 # Customer operations
-@app.route('/admin-cust')
-def manager_cust():
-    data = get_table('customers')
-    print('data', data)
+@app.route('/admin-cust', methods=['GET', 'POST'])
+def manager_cust(): #gets and displays the customer table
+    if request.method == 'POST':
+        if any([request.form[item] == '' for item in request.form]):
+            return redirect(url_for('manager_cust'))
+        else:
+            conn = connect_db()
+            curr = conn.cursor()
+
+            print(request.form)
+
+            query = f"""
+            UPDATE customers
+            SET cust_fname = '{request.form['fname']}', cust_lname = '{request.form['lname']}', cust_phone = '{request.form['phone']}'
+            WHERE cust_id = {request.form['upd-cust']};
+            """
+
+            print('executing', query)
+            curr.execute(query)
+            conn.commit()
+
+            curr.close()
+            conn.close()
+
+    _data = get_table('customers')
+    print('data', _data)
+    return render_template('admin-cust.html', data=_data)
+
+@app.route('/admin-cust/filter', methods=['GET'])
+def filter_cust():
+    conn = connect_db()
+    curr = conn.cursor()
+
+    print(request.form)
+
+    filter_by_id = request.args.get('filter-by-id')
+
+    if filter_by_id == '':
+        return redirect(url_for('manager_cust'))
+
+    query = f"""
+    SELECT * FROM customers
+    WHERE cust_id = {filter_by_id};
+    """
+
+    print('executing', query)
+    curr.execute(query)
+    data = curr.fetchall()
+    conn.commit()
+
+    curr.close()
+    conn.close()
     return render_template('admin-cust.html', data=data)
 
 @app.route('/admin-cust/delete', methods=['GET', 'POST'])
-def delete_cust():
+def delete_cust(): #deletes from customer table
     if request.method == 'POST':
-        cust_id = request.form['del']
-        delete_from_db('customers', cust_id, 'cust_id')
+        customer_id = request.form['del']
+        delete_from_db('customers', customer_id, 'cust_id')
     return redirect(url_for('manager_cust'))
+
+@app.route('/admin-cust/add-cust', methods=['POST'])
+def add_cust(): #adds to customer table
+    # make connecting
+    # make cursor
+    conn = connect_db()
+    curr = conn.cursor()
+    # make sql string using text inside text fields 
+    fname = request.form['fname']
+    lname = request.form['lname']
+    phone = request.form['phone']
+
+    if fname == '' or lname == '' or phone == '':
+        return redirect(url_for('manager_cust'))
+    
+    query = f"INSERT INTO customers (cust_fname, cust_lname, cust_phone) VALUES ('{fname}', '{lname}', '{phone}');"
+    # submit sql command
+    curr.execute(query)
+    conn.commit()
+    # close connection and cursor
+    curr.close()
+    conn.close()
+    return redirect(url_for('manager_cust'))
+
+
+@app.route('/admin-cust/update', methods=['POST'])
+def update_cust():
+    #if request.method == 'POST':
+    conn = connect_db()
+    curr = conn.cursor()
+
+    print(request.form)
+
+    query = f"SELECT * FROM customers WHERE cust_id = {request.form['upd-cust']}"
+    curr.execute(query)
+    data = curr.fetchall()
+    print(data[0])
+    curr.close()
+    conn.close()
+
+    return render_template('update-cust.html', data=data[0])
+
+
 
 # Manager operations
 @app.route('/admin-mana', methods=['GET', 'POST'])
