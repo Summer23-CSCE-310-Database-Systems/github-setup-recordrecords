@@ -24,4 +24,4 @@ After running head to your web browser and go to the
 ```
 http://127.0.0.1:5000
 ```
-For the login splash: for testing you may use the ManagerID: 1 or CustomerID: 1001
+For the login splash: for testing you may use the ```ManagerID: 1 ```or ```CustomerID: 1001```
