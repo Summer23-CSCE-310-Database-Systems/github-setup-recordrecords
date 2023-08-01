@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, jsonify, request, redirect, session
+from flask import Flask, render_template, url_for, jsonify, request, redirect, session, flash
 import psycopg2
 
 app = Flask(__name__)
@@ -123,6 +123,16 @@ def update_cus():
     return redirect(url_for('search_cus'))
 
 # Vinyl operations
+
+def isValidPrice(s):
+    try:
+        if float(s) or s.isdigit():
+            return True
+        else:
+            return False
+    except ValueError:
+        return False
+    
 @app.route('/admin-vinyl')
 def manager_vinyl():
     data = get_table('vinyls')
@@ -139,8 +149,86 @@ def delete_vinyl():
 @app.route('/admin-vinyl/update', methods=['GET', 'POST'])
 def update_vinyl():
     if request.method == 'POST':
-        pass
+        conn = connect_db()
+        cursor = conn.cursor()
+        
+        print(request.form)
+        recordID = request.form['vinylID']
+        recordName = request.form['updateName']
+        recordArtist = request.form['updateArtist']
+        recordGenre = request.form['updateGenre']
+        recordPrice = request.form['updatePrice']
+        if recordID == '' or recordName == '' or recordArtist == '' or recordGenre == '' or recordPrice == '':
+            cursor.close()
+            conn.close()
+            print("vinyl update: one of the values is empty")
+            flash("Empty Field*")
+            return redirect(url_for('manager_vinyl'))
 
+        if recordID.isdigit() == False:
+            cursor.close()
+            conn.close()
+            print("vinyl update: invalid ID")
+            flash("Invalid ID*")
+            return redirect(url_for('manager_vinyl'))
+        
+        if isValidPrice(recordPrice) == False:
+            cursor.close()
+            conn.close()
+            print("vinyl update: invalid price")
+            flash("Invalid Price*")
+            return redirect(url_for('manager_vinyl'))  
+    
+        query = f"""
+            UPDATE vinyls
+            SET vin_name = '{recordName}', vin_artist = '{recordArtist}', vin_genre = '{recordGenre}', vin_price = '{recordPrice}'
+            WHERE vin_id = {recordID};
+            """
+        cursor.execute(query)
+        print("executing vinyl update query")
+        conn.commit()
+
+        cursor.close()
+        conn.close()
+        
+        return redirect(url_for('manager_vinyl'))
+
+
+        
+
+@app.route('/admin-vinyl/add', methods=['GET', 'POST'])
+def add_vinyl():
+    if request.method == 'POST':
+        conn = connect_db()
+        cursor = conn.cursor()
+        print(request.form)
+        
+        recordName = request.form['inputName']
+        recordArtist = request.form['inputArtist']
+        recordGenre = request.form['inputGenre']
+        recordPrice = request.form['inputPrice']
+        
+        if recordName == '' or recordArtist == '' or recordGenre == '' or recordPrice == '':
+            cursor.close()
+            conn.close()
+            flash("Empty Field*")
+            return redirect(url_for('manager_vinyl'))
+        
+        if isValidPrice(recordPrice) == False:
+            cursor.close()
+            conn.close()
+            flash("Invalid Price*")
+            return redirect(url_for('manager_vinyl'))
+        
+        query = f"INSERT INTO vinyls (vin_name, vin_artist, vin_genre, vin_price) VALUES ('{recordName}', '{recordArtist}', '{recordGenre}', '{recordPrice}');"
+        cursor.execute(query)
+        conn.commit()
+        # Close the cursor and database connection
+        cursor.close()
+        conn.close()
+        flash("Data Inserted Successfully*")
+        return redirect(url_for('manager_vinyl'))
+    
 # Customer operations
 @app.route('/admin-cust')
 def manager_cust():
