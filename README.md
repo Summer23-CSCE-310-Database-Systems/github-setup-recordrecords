@@ -13,8 +13,15 @@ This code has been written, run, and tested on:
 - Python - Download latest version at https://www.python.org/downloads/
 ## Install the application
 You can get this application locally by cloning this repository.
+make sure to install the imports - flask and psycopg2
 ## Run the application
 ```python
 flask run
 ```
 You can test this application by cloning it locally and installing the requirements and external dependencies listed above. Then launch the application using the command: flask run
+
+After running head to your web browser and go to the 
+```
+http://127.0.0.1:5000
+```
+For the login splash: for testing you may use the ManagerID: 1 or CustomerID: 1001
