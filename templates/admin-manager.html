@@ -16,10 +16,8 @@
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/js/all.min.js"></script>
 
 <body class="" style="background-color: #6F5643">
-    <div>
-        <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search..">
-    </div>
-    <div class="container rounded flex-column p-3 w-25 h-100" style="background-color: #ECE6C2">
+    <br>
+    <div class="container rounded flex-column p-3 h-100" style="background-color: #ECE6C2">
         <h2>Managers</h2>
 
         <form action="/admin-mana/update" method="post" id="upd-form"></form>
@@ -30,8 +28,8 @@
                     <th style="text-align: center;">F. Name</th>
                     <th style="text-align: center;">L. Name</th>
                     <th style="text-align: center;">Phone</th>
-                    <th>Delete</th>
-                    <th>Update</th>
+                    <th style="text-align: center;">Delete</th>
+                    <th style="text-align: center;">Update</th>
                 </tr>
             </thead>
             {% for item in data %}
@@ -52,7 +50,7 @@
 
     <br>
 
-    <div class="container rounded flex-column p-3 w-25 h-100" style="background-color: #ECE6C2">
+    <div class="container rounded flex-column p-3 h-100" style="background-color: #ECE6C2">
         <h2>Add New Manager</h2>
         <form action="/admin-mana/create" method="post" id="cre-form"></form>
         <table id="myTable" class="table table-striped">
