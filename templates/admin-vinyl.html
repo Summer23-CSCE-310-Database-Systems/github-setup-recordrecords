@@ -29,9 +29,11 @@
         <h2 style="text-align: center; margin-bottom: 20px; color: #CC6B49;">Available Records</h2>
         {%with messages = get_flashed_messages()%}
         {%if messages%}
-        {%for message in messages%}
-        {{message}}
-        {%endfor%}
+        <div class="alert alert-danger mt-3" role="alert">
+            {% for message in messages %}
+            {{message}}
+            {% endfor %}
+            </div>
         {%endif%}
         {%endwith%}
 

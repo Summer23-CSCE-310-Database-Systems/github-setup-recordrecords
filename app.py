@@ -308,6 +308,7 @@ def add_cust(): #adds to customer table
     phone = request.form['phone']
 
     if fname == '' or lname == '' or phone == '':
+        flash("Error: You have an empty field*")
         return redirect(url_for('manager_cust'))
     
     query = f"INSERT INTO customers (cust_fname, cust_lname, cust_phone) VALUES ('{fname}', '{lname}', '{phone}');"
