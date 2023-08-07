@@ -239,6 +239,7 @@ def add_vinyl():
 def manager_cust(): #gets and displays the customer table
     if request.method == 'POST':
         if any([request.form[item] == '' for item in request.form]):
+            flash("Error: Empty update field*")
             return redirect(url_for('manager_cust'))
         else:
             conn = connect_db()
